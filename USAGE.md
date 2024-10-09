@@ -1,5 +1,7 @@
 # Getting started
 
+**This project works best on Linux!** You may be able to run it on Windows, but it is not recommended.
+
 1. Run `pip install virtualenv` to install the virtual environment package.
 1. Run `myenv\Scripts\activate` on Windows or `source myenv/bin/activate` on MacOS/Linux to activate the virtual environment.
 1. Run `pip install -r requirements.txt` to install the required packages. Note that this will require ~1GB of disk space.
