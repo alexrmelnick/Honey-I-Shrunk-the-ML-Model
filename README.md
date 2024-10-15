@@ -37,6 +37,26 @@ TinyML, which refers to machine learning models that can run on resource-constra
 
 These papers demonstrate the significant progress in enabling speech recognition capabilities on highly resource-constrained devices through TinyML techniques. Key approaches include model architecture innovations, quantization, pruning, and hardware-aware neural architecture search. While challenges remain, TinyML is opening up new possibilities for ubiquitous speech interfaces across IoT devices.
 
+## Sprint Breakdown and Objectives
+
+We have structured our project into several sprints to ensure a focused and organized approach to development. Each sprint has specific goals to help us gradually build towards the final product.
+
+### Sprint 1: Research and Exploration
+
+The first sprint was dedicated to conducting thorough research on the topics of TinyML, Speech-to-Text models, and relevant optimization techniques. During this sprint, we explored recent advancements in TinyML, particularly in speech recognition applications. This research provided the foundation for our technical approach and narrowed down potential frameworks and techniques, including model compression, quantization, and pruning.
+
+### Sprint 2: Model Selection and Dataset Identification
+
+In Sprint 2, we chose the Whisper model as our base speech-to-text model, recognizing its high accuracy and efficiency. We also identified relevant datasets for training and testing, ensuring that they reflect the wide range of real-world speech patterns. The Google Speech Commands dataset and other publicly available speech datasets were shortlisted, which would help us refine the model's ability to recognize spoken language across different environments and accents.
+
+### Sprint 3: Model Training and Optimization
+
+Sprint 3 focuses on training the Whisper model and optimizing it for edge deployment. We will apply techniques such as pruning and quantization to shrink the model's size while maintaining accuracy and performance. If necessary, we will also consider model distillation as a fallback strategy, further reducing the model's complexity. The goal is to create a highly efficient and compact version of the speech-to-text model that can run on resource-constrained devices.
+
+### Sprint 4: Hardware Implementation
+
+The final sprint will involve deploying the optimized model onto a low-cost microcontroller or single-board computer (SBC). We will work on integrating the model with the hardware, ensuring it runs smoothly in real-time with minimal latency. This step will also involve testing the performance of the model on the target device and making any necessary adjustments to ensure it meets the requirements of portability, speed, and accuracy.
+
 ## Citations of Papers
 
 1. Tsoukas, V., Gkogkidis, A., Boumpa, E., & Kakarountas, A. (2024). A review on the emerging technology of TinyML. ACM Computing Surveys, 56(10), Article 259. <https://doi.org/10.1145/3661820>
