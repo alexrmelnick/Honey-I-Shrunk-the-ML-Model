@@ -47,7 +47,7 @@ The first sprint was dedicated to conducting thorough research on the topics of 
 
 ### Sprint 2: Model Selection and Dataset Identification
 
-In Sprint 2, we chose the Whisper model as our base speech-to-text model, recognizing its high accuracy and efficiency. We also identified relevant datasets for training and testing, ensuring that they reflect the wide range of real-world speech patterns. The Google Speech Commands dataset and other publicly available speech datasets were shortlisted, which would help us refine the model's ability to recognize spoken language across different environments and accents.
+In Sprint 2, we chose the Whisper model as our base speech-to-text model, recognizing its high accuracy and efficiency. We also identified relevant datasets for training and testing, ensuring that they reflect the wide range of real-world speech patterns. 
 
 ### Sprint 3: Model Training and Optimization
 
