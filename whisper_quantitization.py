@@ -45,14 +45,14 @@ with torch.no_grad():
 decoded_output = processor.batch_decode(generated_ids, skip_special_tokens=True)
 print(f"Decoded output: {decoded_output}")
 
-# Save the quantized model's state_dict instead of using save_pretrained
+# Save the entire quantized model instead of using save_pretrained
 save_dir = "quantized_whisper_tiny_en"
 os.makedirs(save_dir, exist_ok=True)
 
-# Save the state_dict of the quantized model
-torch.save(quantized_model.state_dict(), os.path.join(save_dir, "pytorch_model_quantized.bin"))
+# Save the entire quantized model using torch.save()
+torch.save(quantized_model, os.path.join(save_dir, "quantized_model.pth"))
 
-# Optionally, save the processor as well
+# Save the processor (tokenizer and configuration)
 processor.save_pretrained(save_dir)
 
-print(f"Quantized model saved to {save_dir}")
+print(f"Quantized model and processor saved to {save_dir}")
