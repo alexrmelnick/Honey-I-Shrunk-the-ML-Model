@@ -1,0 +1,51 @@
+# Written by Alex Melnick with the aid of GitHub Copilot
+
+import torch
+import torchaudio
+from transformers import WhisperProcessor, WhisperForConditionalGeneration
+
+# Load the Whisper model and processor
+model_name = "openai/whisper-tiny.en"
+model = WhisperForConditionalGeneration.from_pretrained(model_name)
+processor = WhisperProcessor.from_pretrained(model_name)
+
+# Set the model to evaluation mode before quantization
+model.eval()
+
+# Print the size of the original model
+print(f"Original model size: {model.state_dict().__sizeof__() / 1e6:.2f} MB")
+
+# Apply dynamic range quantization
+quantized_model = torch.quantization.quantize_dynamic(
+    model,  # The model to quantize
+    {torch.nn.Linear},  # Specify the types of layers to quantize (here, nn.Linear layers)
+    dtype=torch.qint8  # Use int8 for dynamic quantization
+)
+
+# Print the size of the quantized model
+print(f"Quantized model size: {quantized_model.state_dict().__sizeof__() / 1e6:.2f} MB")
+
+# Load your test audio file
+audio_file = "Whisper_Test.mp3"
+waveform, sample_rate = torchaudio.load(audio_file)
+
+# Resample the audio to 16000 Hz (the required input rate for Whisper models)
+resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000)
+waveform = resampler(waveform)
+
+# Preprocess the audio input
+input_features = processor(waveform.squeeze(), sampling_rate=16000, return_tensors="pt").input_features
+
+# Test the quantized model with the actual audio input
+with torch.no_grad():
+    generated_ids = quantized_model.generate(input_features)
+
+# Decode the output to text
+decoded_output = processor.batch_decode(generated_ids, skip_special_tokens=True)
+print(f"Decoded output: {decoded_output}")
+
+# Save the quantized model if needed
+quantized_model.save_pretrained("quantized_whisper_tiny_en")
+
+# Optionally, save the processor as well
+processor.save_pretrained("quantized_whisper_tiny_en_processor")

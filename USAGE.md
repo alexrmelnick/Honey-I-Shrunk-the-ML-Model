@@ -1,5 +1,15 @@
 # Getting started
 
+## New Instructions for SCC
+
+1. Run `module load miniconda`
+1. Run `conda load activate fall-2024-pyt`
+1. Navigate to the directory with `cd /projectnb/ece601/Honey_I_Shrunk_the_ML_Model/Honey-I-Shrunk-the-ML-Model`. You are now in our project directory.
+1. Run `git pull` to get the latest changes.
+
+
+## Old Instructions (We probably want to delete this at some point)
+
 **PLEASE JUST USE LINUX** Please note that this install can take more than an hour depending on download speeds.
 
 1. Install SSL dependencies using `sudo apt install build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git`.
