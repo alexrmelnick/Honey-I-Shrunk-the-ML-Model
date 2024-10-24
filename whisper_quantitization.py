@@ -1,8 +1,9 @@
-# Written by Alex Melnick with the aid of GitHub Copilot
+# Written by Alex Melnick with the aid of GPT-4o and GitHub Copilot
 
 import torch
 import torchaudio
 from transformers import WhisperProcessor, WhisperForConditionalGeneration
+import os
 
 # Load the Whisper model and processor
 model_name = "openai/whisper-tiny.en"
@@ -44,8 +45,14 @@ with torch.no_grad():
 decoded_output = processor.batch_decode(generated_ids, skip_special_tokens=True)
 print(f"Decoded output: {decoded_output}")
 
-# Save the quantized model if needed
-quantized_model.save_pretrained("quantized_whisper_tiny_en")
+# Save the quantized model's state_dict instead of using save_pretrained
+save_dir = "quantized_whisper_tiny_en"
+os.makedirs(save_dir, exist_ok=True)
+
+# Save the state_dict of the quantized model
+torch.save(quantized_model.state_dict(), os.path.join(save_dir, "pytorch_model_quantized.bin"))
 
 # Optionally, save the processor as well
-processor.save_pretrained("quantized_whisper_tiny_en_processor")
+processor.save_pretrained(save_dir)
+
+print(f"Quantized model saved to {save_dir}")
