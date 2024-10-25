@@ -5,3 +5,4 @@ Whisper_Test.srt
 Whisper_Test.txt
 Whisper_Test.vtt
 /Models/*
+!Models/where_are_the_models.md
