@@ -3,7 +3,8 @@
 ## New Instructions for SCC
 
 1. Run `module load miniconda`
-1. Run `conda load activate fall-2024-pyt`
+1. Run `module load academic-ml/fall-2024`
+1. Run `conda activate fall-2024-pyt`
 1. Navigate to the directory with `cd /projectnb/ece601/Honey_I_Shrunk_the_ML_Model/Honey-I-Shrunk-the-ML-Model`. You are now in our project directory.
 1. Run `git pull` to get the latest changes.
 

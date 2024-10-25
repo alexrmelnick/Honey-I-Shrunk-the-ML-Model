@@ -46,7 +46,7 @@ decoded_output = processor.batch_decode(generated_ids, skip_special_tokens=True)
 print(f"Decoded output: {decoded_output}")
 
 # Save the entire quantized model instead of using save_pretrained
-save_dir = "quantized_whisper_tiny_en"
+save_dir = "Models/quantized_whisper_tiny_en"
 os.makedirs(save_dir, exist_ok=True)
 
 # Save the entire quantized model using torch.save()
