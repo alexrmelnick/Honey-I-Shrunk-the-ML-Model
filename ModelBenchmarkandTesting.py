@@ -1,5 +1,3 @@
-# Written by Sergio Rodriguez with the aid of GPT-4o
-
 import torch
 import torchaudio
 import soundfile as sf
@@ -9,6 +7,7 @@ import psutil
 import time
 import os
 import numpy as np
+import gc
 
 # Ensure the data directory exists
 os.makedirs("./data", exist_ok=True)
@@ -28,11 +27,14 @@ quantized_model.eval()
 dataset = torchaudio.datasets.LIBRISPEECH("./data", url="test-clean", download=True)
 dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
 
+import tracemalloc
+
 
 # Function to measure memory and CPU usage
 def measure_memory_and_cpu_usage(func, *args, **kwargs):
     process = psutil.Process()
-    start_memory = process.memory_info().rss / (1024 * 1024)  # Memory in MB
+    gc.collect()
+    tracemalloc.start()
     start_time = time.time()
 
     # Measure CPU usage during execution
@@ -43,25 +45,16 @@ def measure_memory_and_cpu_usage(func, *args, **kwargs):
         end_cpu_times = process.cpu_times()
 
     end_time = time.time()
-    end_memory = process.memory_info().rss / (1024 * 1024)  # Memory in MB
+    current_memory, peak_memory = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
 
-    memory_used = end_memory - start_memory
+    memory_used = peak_memory / (1024 * 1024)  # Convert peak memory usage to MB
     time_taken = end_time - start_time
 
     cpu_user_time = end_cpu_times.user - start_cpu_times.user
     cpu_system_time = end_cpu_times.system - start_cpu_times.system
 
-    return result, memory_used, time_taken, cpu_user_time, cpu_system_time
-    process = psutil.Process()
-    start_memory = process.memory_info().rss / (1024 * 1024)  # Start memory in MB
-    start_time = time.time()
-    result = func(*args, **kwargs)
-    end_time = time.time()
-    end_memory = process.memory_info().rss / (1024 * 1024)  # End memory in MB
-
-    memory_used = end_memory - start_memory
-    time_taken = end_time - start_time
-    return result, memory_used, time_taken
+    return result, abs(memory_used), time_taken, cpu_user_time, cpu_system_time
 
 
 # Iterate over dataset and perform inference to measure memory usage and accuracy
@@ -77,7 +70,7 @@ def trim_waveform(waveform, sample_rate, duration_sec):
 for i, data in enumerate(dataloader):
     waveform, sample_rate = data[0], data[1]
     # Limit the number of samples to process
-    if i >= 100:
+    if i >= 20:  # For example, process 20 samples
         break
 
     # Trim waveform to desired length (10, 15, or 20 seconds)
