@@ -3,7 +3,7 @@
 import torch
 import torchaudio
 import soundfile as sf
-from transformers import WhisperProcessor
+from transformers import WhisperProcessor,WhisperForConditionalGeneration
 from torch.utils.data import DataLoader
 import psutil
 import time
@@ -22,9 +22,14 @@ torch.set_num_threads(1)
 dummy_memory = np.zeros((500 * 1024 * 1024), dtype='uint8')  # Allocate around 500MB
 
 # Load the quantized model and processor
-quantized_model = torch.load("Models/quantized_whisper_tiny_en/quantized_model.pth")
-processor = WhisperProcessor.from_pretrained("Models/quantized_whisper_tiny_en")
+quantized_model = torch.load("Models/quantized_whisper_base/quantized_model_base.pth")
+processor = WhisperProcessor.from_pretrained("Models/quantized_whisper_base")
 quantized_model.eval()
+
+# model_name = "openai/whisper-base"
+# original_model = WhisperForConditionalGeneration.from_pretrained(model_name)
+# processor = WhisperProcessor.from_pretrained(model_name)
+# original_model.eval()
 
 # Load LibriSpeech dataset (test-clean subset for accuracy evaluation)
 dataset = torchaudio.datasets.LIBRISPEECH("./data", url="test-clean", download=True)
@@ -204,6 +209,7 @@ print(f"Average WER for 20-second recordings: {wer_sum_20s / total_samples_20s i
 
 
 """
+Quantized Tiny_en:
 Memory Usage Summary: 
 +----------------------+---------------------+---------------------+----------------------+---------------------+
 |  Recording Duration  |    Average (MB)     |     Median (MB)     |     Lowest (MB)      |    Highest (MB)     |
@@ -226,4 +232,77 @@ Total samples processed for 15-second recordings: 100
 Average WER for 15-second recordings: 0.32
 Total samples processed for 20-second recordings: 100
 Average WER for 20-second recordings: 0.35
+
+
+Tiny_en:
+Memory Usage Summary: 
++----------------------+---------------------+----------------------+----------------------+---------------------+
+|  Recording Duration  |    Average (MB)     |     Median (MB)      |     Lowest (MB)      |    Highest (MB)     |
++----------------------+---------------------+----------------------+----------------------+---------------------+
+| 10-second recordings | 0.06062358856201172 | 0.057627201080322266 | 0.04269695281982422  | 0.5117874145507812  |
+| 15-second recordings | 0.05559160232543945 | 0.057435035705566406 | 0.043735504150390625 | 0.06049919128417969 |
+| 20-second recordings | 0.05714850425720215 | 0.05777311325073242  | 0.045706748962402344 | 0.06101512908935547 |
++----------------------+---------------------+----------------------+----------------------+---------------------+
+Word Error Rate (WER) Summary:
++----------------------+---------------------+--------------------+------------+--------------------+
+|  Recording Duration  |     Average WER     |     Median WER     | Lowest WER |    Highest WER     |
++----------------------+---------------------+--------------------+------------+--------------------+
+| 10-second recordings | 0.31539303125666607 | 0.3330039525691699 |    0.0     | 0.8070175438596491 |
+| 15-second recordings | 0.3237399251359314  | 0.2620137299771167 |    0.0     | 0.8301886792452831 |
+| 20-second recordings | 0.34300472079627176 | 0.3021739130434783 |    0.0     |        0.85        |
++----------------------+---------------------+--------------------+------------+--------------------+
+Total samples processed for 10-second recordings: 100
+Average WER for 10-second recordings: 0.32
+Total samples processed for 15-second recordings: 100
+Average WER for 15-second recordings: 0.32
+Total samples processed for 20-second recordings: 100
+Average WER for 20-second recordings: 0.34
+
+Whisper Base:
+Memory Usage Summary: 
++----------------------+----------------------+----------------------+----------------------+---------------------+
+|  Recording Duration  |     Average (MB)     |     Median (MB)      |     Lowest (MB)      |    Highest (MB)     |
++----------------------+----------------------+----------------------+----------------------+---------------------+
+| 10-second recordings | 0.06762524604797364  | 0.06028032302856445  | 0.043845176696777344 | 0.5093307495117188  |
+| 15-second recordings | 0.058406105041503904 | 0.05909252166748047  | 0.046527862548828125 | 0.06310081481933594 |
+| 20-second recordings | 0.059731788635253906 | 0.059627532958984375 | 0.048150062561035156 | 0.06374645233154297 |
++----------------------+----------------------+----------------------+----------------------+---------------------+
+Word Error Rate (WER) Summary:
++----------------------+---------------------+---------------------+------------+--------------------+
+|  Recording Duration  |     Average WER     |     Median WER      | Lowest WER |    Highest WER     |
++----------------------+---------------------+---------------------+------------+--------------------+
+| 10-second recordings | 0.36843071678282896 | 0.4105263157894737  |    0.0     |        1.5         |
+| 15-second recordings | 0.3629425866573451  | 0.3514705882352941  |    0.0     | 0.8666666666666667 |
+| 20-second recordings | 0.39287492694984216 | 0.36363636363636365 |    0.0     |        0.9         |
++----------------------+---------------------+---------------------+------------+--------------------+
+Total samples processed for 10-second recordings: 100
+Average WER for 10-second recordings: 0.37
+Total samples processed for 15-second recordings: 100
+Average WER for 15-second recordings: 0.36
+Total samples processed for 20-second recordings: 100
+Average WER for 20-second recordings: 0.39
+
+Quantized Whisper Base:
+Memory Usage Summary: 
++----------------------+---------------------+---------------------+----------------------+---------------------+
+|  Recording Duration  |    Average (MB)     |     Median (MB)     |     Lowest (MB)      |    Highest (MB)     |
++----------------------+---------------------+---------------------+----------------------+---------------------+
+| 10-second recordings | 0.06808197975158692 |  0.064361572265625  |  0.0542449951171875  | 0.5165262222290039  |
+| 15-second recordings | 0.06307750701904297 | 0.0639801025390625  | 0.054996490478515625 | 0.06687641143798828 |
+| 20-second recordings | 0.06411605834960937 | 0.06436920166015625 | 0.056580543518066406 | 0.06723880767822266 |
++----------------------+---------------------+---------------------+----------------------+---------------------+
+Word Error Rate (WER) Summary:
++----------------------+---------------------+---------------------+------------+-------------+
+|  Recording Duration  |     Average WER     |     Median WER      | Lowest WER | Highest WER |
++----------------------+---------------------+---------------------+------------+-------------+
+| 10-second recordings | 0.37057226506812063 | 0.4373913043478261  |    0.0     |     1.0     |
+| 15-second recordings | 0.35165972465553397 | 0.3117408906882591  |    0.0     |    0.85     |
+| 20-second recordings | 0.4192931386001764  | 0.41883116883116883 |    0.0     |     0.9     |
++----------------------+---------------------+---------------------+------------+-------------+
+Total samples processed for 10-second recordings: 100
+Average WER for 10-second recordings: 0.37
+Total samples processed for 15-second recordings: 100
+Average WER for 15-second recordings: 0.35
+Total samples processed for 20-second recordings: 100
+Average WER for 20-second recordings: 0.42
 """
