@@ -7,3 +7,4 @@ Whisper_Test.vtt
 /Models/*
 !Models/where_are_the_models.md
 /data/
+*.1
