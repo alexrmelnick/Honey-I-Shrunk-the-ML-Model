@@ -3,6 +3,8 @@
 import torch
 import torchaudio
 import soundfile as sf
+from datasets import load_dataset
+from torchaudio.transforms import Resample
 from transformers import WhisperProcessor,WhisperForConditionalGeneration
 from torch.utils.data import DataLoader
 import psutil
@@ -11,6 +13,9 @@ import os
 import numpy as np
 import jiwer
 import gc
+import tracemalloc
+from tabulate import tabulate
+
 
 # Ensure the data directory exists
 os.makedirs("./data", exist_ok=True)
@@ -34,8 +39,6 @@ quantized_model.eval()
 # Load LibriSpeech dataset (test-clean subset for accuracy evaluation)
 dataset = torchaudio.datasets.LIBRISPEECH("./data", url="test-clean", download=True)
 dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
-
-import tracemalloc
 
 
 # Function to measure memory and CPU usage
@@ -163,8 +166,7 @@ for i, data in enumerate(dataloader):
 
         total_samples += 1
 
-# Print summary of results
-from tabulate import tabulate
+
 
 # Prepare summary tables for memory usage and WER
 memory_summary = [
@@ -209,6 +211,7 @@ print(f"Average WER for 20-second recordings: {wer_sum_20s / total_samples_20s i
 
 
 """
+
 Quantized Tiny_en:
 Memory Usage Summary: 
 +----------------------+---------------------+---------------------+----------------------+---------------------+
