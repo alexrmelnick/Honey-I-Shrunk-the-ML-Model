@@ -3,13 +3,15 @@ import torch
 import numpy
 import torchvision
 
+device = torch.device('cpu')
+
 resnet18 = torchvision.models.resnet18(torchvision.models.ResNet18_Weights.IMAGENET1K_V1).eval()
 
 sample_input = (torch.randn(1, 3, 224, 224),)
 edge_model = ai_edge_torch.convert(resnet18.eval(), sample_input)
 
 output = edge_model(*sample_inputs)
-
+edge_model.export('resnet.tflite')
 
 # import ai_edge_torch
 # import torch
