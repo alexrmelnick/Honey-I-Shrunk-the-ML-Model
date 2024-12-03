@@ -25,15 +25,15 @@ dummy_memory = np.zeros((500 * 1024 * 1024), dtype='uint8')  # Allocate around 5
 # Load the quantized model and processor
 # model = torch.load("Models/quantized_whisper_base/quantized_model_base.pth")
 # processor = WhisperProcessor.from_pretrained("Models/quantized_whisper_base")
-# model = torch.load("Models/quantized_whisper_base/quantized_model_base.pth")
-# processor = WhisperProcessor.from_pretrained("Models/quantized_whisper_base")
-# model.eval()
-
-model_name = "openai/whisper-tiny.en"
-# model_name = "openai/whisper-base"
-model = WhisperForConditionalGeneration.from_pretrained(model_name)
-processor = WhisperProcessor.from_pretrained(model_name)
+model = torch.load("Models/quantized_whisper_tiny_en/quantized_model.pth")
+processor = WhisperProcessor.from_pretrained("Models/quantized_whisper_tiny_en")
 model.eval()
+
+# model_name = "openai/whisper-tiny.en"
+# # model_name = "openai/whisper-base"
+# model = WhisperForConditionalGeneration.from_pretrained(model_name)
+# processor = WhisperProcessor.from_pretrained(model_name)
+# model.eval()
 
 
 
@@ -175,5 +175,40 @@ Word Error Rate (WER) Summary:
 | 20-second recordings | 0.5069215245492741 | 0.18518518518518517 |    0.0     | 9.833333333333334 |
 +----------------------+--------------------+---------------------+------------+-------------------+
 
+Tiny En
+Memory Usage Summary:
++----------------------+---------------------+----------------------+----------------------+---------------------+
+|  Recording Duration  |    Average (MB)     |     Median (MB)      |     Lowest (MB)      |    Highest (MB)     |
++----------------------+---------------------+----------------------+----------------------+---------------------+
+| 10-second recordings | 0.03992022514343262 | 0.040816307067871094 | 0.030005455017089844 | 0.06135845184326172 |
+| 15-second recordings | 0.03347084999084473 | 0.033080101013183594 | 0.030054092407226562 |  0.038909912109375  |
+| 20-second recordings | 0.03309560775756836 | 0.03278827667236328  | 0.03006744384765625  |  0.035797119140625  |
++----------------------+---------------------+----------------------+----------------------+---------------------+
+Word Error Rate (WER) Summary:
++----------------------+---------------------+---------------------+------------+-------------+
+|  Recording Duration  |     Average WER     |     Median WER      | Lowest WER | Highest WER |
++----------------------+---------------------+---------------------+------------+-------------+
+| 10-second recordings | 0.2362809366113932  | 0.11145510835913312 |    0.0     |     1.0     |
+| 15-second recordings | 0.29817153078024444 | 0.15268065268065267 |    0.0     |     3.0     |
+| 20-second recordings | 0.34524023222457273 | 0.17902930402930403 |    0.0     |    10.0     |
++----------------------+---------------------+---------------------+------------+-------------+
+
+Quantized Tiny En
+Memory Usage Summary:
++----------------------+---------------------+---------------------+----------------------+---------------------+
+|  Recording Duration  |    Average (MB)     |     Median (MB)     |     Lowest (MB)      |    Highest (MB)     |
++----------------------+---------------------+---------------------+----------------------+---------------------+
+| 10-second recordings | 0.04274847984313965 | 0.04105949401855469 | 0.03296947479248047  | 0.20885562896728516 |
+| 15-second recordings | 0.03588282585144043 | 0.03580331802368164 | 0.033217430114746094 | 0.0386199951171875  |
+| 20-second recordings | 0.03563480377197266 | 0.03568840026855469 | 0.03309345245361328  | 0.03779315948486328 |
++----------------------+---------------------+---------------------+----------------------+---------------------+
+Word Error Rate (WER) Summary:
++----------------------+---------------------+---------------------+------------+-------------+
+|  Recording Duration  |     Average WER     |     Median WER      | Lowest WER | Highest WER |
++----------------------+---------------------+---------------------+------------+-------------+
+| 10-second recordings | 0.24419047457161372 | 0.12310606060606061 |    0.0     |     1.0     |
+| 15-second recordings | 0.30779991224245945 | 0.1620405101275319  |    0.0     |     3.0     |
+| 20-second recordings | 0.2581943369709067  | 0.18181818181818182 |    0.0     |     2.0     |
++----------------------+---------------------+---------------------+------------+-------------+
 
 """
