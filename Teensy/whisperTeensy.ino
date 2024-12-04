@@ -5,7 +5,7 @@
 #include <tensorflow/lite/schema/schema_generated.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include "model_data.h"
+#include "model_data.h"  // this is the actual model coverted to .h
 
 // Audio Configuration
 #define SAMPLE_RATE 16000
