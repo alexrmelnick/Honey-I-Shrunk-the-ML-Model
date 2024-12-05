@@ -5,13 +5,15 @@ import torchaudio
 from transformers import WhisperProcessor
 
 # Step 1: Load the quantized model and processor
-quantized_model = torch.load("Models/quantized_whisper_tiny_en/quantized_model.pth")
+quantized_model = torch.load("Models/quantized_whisper_tiny_en/quantized_model.pth", map_location="cpu")
 
 # Load the processor for pre-processing the audio input
 processor = WhisperProcessor.from_pretrained("Models/quantized_whisper_tiny_en")
 
 # Set the quantized model to evaluation mode
 quantized_model.eval()
+quantized_model.config.is_assistant = False
+
 
 # Step 2: Load the test audio file "Whisper_Test.mp3"
 audio_file = "Whisper_Test.mp3"

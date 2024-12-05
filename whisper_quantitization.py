@@ -1,5 +1,3 @@
-# Written by Alex Melnick with the aid of GPT-4o and GitHub Copilot
-
 import torch
 import torchaudio
 from transformers import WhisperProcessor, WhisperForConditionalGeneration
@@ -35,7 +33,8 @@ resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000
 waveform = resampler(waveform)
 
 # Preprocess the audio input
-input_features = processor(waveform.squeeze(), sampling_rate=16000, return_tensors="pt").input_features
+inputs = processor(waveform.squeeze(), sampling_rate=16000, return_tensors="pt")
+input_features = inputs.input_features  # No attention_mask
 
 # Test the quantized model with the actual audio input
 with torch.no_grad():
