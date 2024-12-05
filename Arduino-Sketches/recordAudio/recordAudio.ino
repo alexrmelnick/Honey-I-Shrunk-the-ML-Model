@@ -4,12 +4,12 @@
 #include <Audio.h>
 #include <Wire.h>
 #include <SPI.h>
-#include <SerialFlash.h>
+#include <SD.h>
 
 // GUItool: begin automatically generated code
 AudioInputI2S            i2s2;
 AudioRecordQueue         queue1;
-AudioPlaySerialflashRaw  playRaw1;
+AudioPlaySdRaw  playRaw1;
 AudioOutputI2S           i2s1;
 AudioConnection          patchCord1(i2s2, 0, queue1, 0);
 AudioConnection          patchCord2(playRaw1, 0, i2s1, 0);
@@ -17,10 +17,14 @@ AudioConnection          patchCord3(playRaw1, 0, i2s1, 1);
 AudioControlSGTL5000     sgtl5000_1;
 // GUItool: end automatically generated code
 
-SerialFlashFile frec;
-const int myInput = AUDIO_INPUT_MIC;
+const int chipSelect = BUILTIN_SDCARD; // Use Teensy 4.1's built-in SD card
 const uint32_t estimatedFileSize = 44100 * 2 * 5; // 5 seconds of mono audio
 const int recordDuration = 5000;  // 5 seconds in milliseconds
+File frec; // SD file object
+
+// Only use one of these
+const int myInput = AUDIO_INPUT_MIC;
+// const int myInput = AUDIO_INPUT_LINEIN;
 
 void setup() {
   Serial.begin(9600);
@@ -29,12 +33,14 @@ void setup() {
   sgtl5000_1.inputSelect(myInput);
   sgtl5000_1.volume(0.5);
 
-  if (!SerialFlash.begin()) {
+  
+  if (!SD.begin(chipSelect)) {
     while (1) {
-      Serial.println("Unable to access SerialFlash");
+      Serial.println("!!!Main SD card initialization failed!!!");
       delay(1000);
     }
   }
+  Serial.println("Main SD card successfully initialized");
 }
 
 void loop() {
@@ -45,17 +51,12 @@ void loop() {
 void recordAudio() {
   Serial.println("Recording...");
 
-  if (SerialFlash.exists("RECORD.RAW")) {
-    SerialFlash.remove("RECORD.RAW");
+  if (SD.exists("RECORD.RAW")) {
+    SD.remove("RECORD.RAW");
   }
 
-  if (SerialFlash.create("RECORD.RAW", estimatedFileSize)) {
-    frec = SerialFlash.open("RECORD.RAW");
-    if (!frec) {
-      Serial.println("Failed to open file for recording");
-      return;
-    }
-
+  frec = SD.open("RECORD.RAW", FILE_WRITE);
+  if (frec) {
     queue1.begin();
     unsigned long startMillis = millis();
 
@@ -71,6 +72,7 @@ void recordAudio() {
           frec.write(buffer, 512);
         } else {
           Serial.println("File write error!");
+          delay(1000);
         }
       }
     }
@@ -82,16 +84,21 @@ void recordAudio() {
     }
     frec.close();
 
-    Serial.println("Recording complete");
-  } else {
-    Serial.println("Failed to create file on SerialFlash");
   }
+  else { 
+    Serial.println("!!!Failed to open file for recording!!!");
+    Serial.println(frec);
+    delay(1000);
+    return;
+  }
+  
+  Serial.println("Recording complete");
 }
 
 void playAudio() {
   Serial.println("Playing...");
 
-  if (SerialFlash.exists("RECORD.RAW")) {
+  if (SD.exists("RECORD.RAW")) {
     playRaw1.play("RECORD.RAW");
     unsigned long startMillis = millis();
 
@@ -104,6 +111,7 @@ void playAudio() {
     playRaw1.stop();
     Serial.println("Playback complete");
   } else {
-    Serial.println("File not found");
+    Serial.println("!!!File not found for playback!!!");
+    delay(1000);
   }
 }
