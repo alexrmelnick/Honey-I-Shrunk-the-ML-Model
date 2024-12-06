@@ -7,4 +7,9 @@ Whisper_Test.vtt
 /Models/*
 !Models/where_are_the_models.md
 /data/
+/venv/
 *.1
+.idea/Honey-I-Shrunk-the-ML-Model.iml
+.idea/misc.xml
+/.idea
+/.idea
