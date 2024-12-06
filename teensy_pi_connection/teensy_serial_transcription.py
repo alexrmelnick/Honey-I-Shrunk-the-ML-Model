@@ -4,7 +4,7 @@ from faster_whisper import WhisperModel
 
 # Configurable parameters
 SERIAL_PORT = "/dev/ttyACM0"  # Replace with the Teensy's serial port
-BAUD_RATE = 115200            # Ensure this matches the Teensy's settings
+BAUD_RATE = 9600            # Ensure this matches the Teensy's settings
 WAV_FILE = "received_audio.wav"
 
 # Initialize serial communication
@@ -43,6 +43,7 @@ def transcribe_audio(file_name):
 # Send transcription back to Teensy
 def send_transcription(ser, transcription):
     print("Sending transcription back to Teensy...")
+    print(transcription)
     ser.write(transcription.encode() + b"\n")
     print("Transcription sent.")
 
