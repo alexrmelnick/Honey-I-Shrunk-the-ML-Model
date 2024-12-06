@@ -120,7 +120,7 @@ void sendWAVE() {
     frec = SD.open(filename, FILE_READ);
 
     // Serial.println("Sending file");
-    Serial.print("START");
+    Serial.println("START");
     
     // Read and send the file in chunks
     const size_t bufferSize = 64; // Adjust buffer size as needed
@@ -131,7 +131,7 @@ void sendWAVE() {
         Serial.write(buffer, bytesRead); // Send chunk over serial
     }
 
-    Serial.print("END");
+    Serial.println("END");
 
     frec.close();
   }
