@@ -1,5 +1,7 @@
 # Honey, I Shrunk the ML Model
 
+## [Demo Link](https://youtube.com/shorts/yzQz03QHuUk?si=gHY4kzEkKlRfss6J)
+
 ## Definition of the Project
 
 Our goal with this project is to shrink an existing Speech-to-Text machine learning (ML) model down to run on as small a device as possible. We will be using the TinyML framework to achieve this. Ideally, this model will be small enough to run on a wearable device, such as a smartwatch or a pair of smart glasses. The model will be trained on a dataset of speech samples and will be able to convert spoken words into text. The model will be evaluated based on its accuracy, speed, and size.
